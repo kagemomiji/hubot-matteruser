@@ -1,43 +1,22 @@
 name: CI
 
-on: [push, pull_request]
+on: 
+  pull_request:
+    branches: 
+      - main
+    
 
 jobs:
-
   test:
-    name: Test on Node ${{ matrix.node }}
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [ '16', '14' ]
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-      - name: install dependencies
-        run: npm ci
-      - name: Project Tests
-        run: npm test
-
-  test_latest:
     name: Test on latest Node
     runs-on: ubuntu-latest
-    container: node:current
-    steps:
-      - uses: actions/checkout@v1
-      - name: install dependencies
-        run: npm ci
-      - name: Project Tests
-        run: npm test
+    container: node:18.12-alpine3.17
 
-  eslint:
-    name: Check ESLint
-    runs-on: ubuntu-latest
-    container: node:current
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v3
       - name: install dependencies
         run: npm ci
       - name: check lint
         run: npm run lint
+      - name: Project Tests
+        run: npm test
